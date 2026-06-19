@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>천우건설(주) | 신뢰와 기술로 짓는 내일</title>
+<style>
+/* ============================================================
+   RESET & TOKENS
+   ============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --red:        #7A1515;
+  --red-h:      #9b2020;
+  --gold:       #B8A48A;
+  --dark:       #1A1A1A;
+  --gray:       #3C3C3C;
+  --light:      #F2F1EE;
+  --border:     #E2E0DC;
+  --white:      #FFFFFF;
+
+  --i-bg:       #0A0A0A;
+  --i-card:     #111111;
+  --i-border:   #1E1E1E;
+  --i-red:      #CC1A1A;
+  --i-green:    #3A7A3A;
+}
+
+body {
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  color: var(--dark);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* 글자 깨짐 방지 및 한글 가독성 최적화 */
+h1, h2, h3, h4, h5, h6, p, span, div, td, th {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+.eyebrow {
+  font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--red); font-weight: 600; display: block; margin-bottom: 14px;
+}
+
+/* ============================================================
+   INTRANET MODE GLOBAL OVERWRITES (기밀 사내망 전환 효과)
+   ============================================================ */
+body.intranet-mode {
+  background: var(--i-bg);
+  color: #aaa;
+}
+body.intranet-mode #hdr {
+  background: #0d0d0d !important;
+  border-bottom: 1px solid var(--i-border);
+}
+body.intranet-mode section {
+  background: var(--i-bg) !important;
+  border-bottom: 1px solid #141414;
+}
+body.intranet-mode .sec-t { color: var(--white) !important; }
+body.intranet-mode .about-p, body.intranet-mode .proj-meta { color: #777 !important; }
+body.intranet-mode .about-box { background: #111; border-left-color: var(--i-red); }
+body.intranet-mode .about-year { background: var(--i-red); }
+body.intranet-mode .about-q { color: #eee; }
+
+/* 오버레이 진실 폭로 텍스트 효과 */
+.truth-text {
+  display: none;
+  color: #ff3333 !important;
+  font-family: monospace;
+  font-size: 13px !important;
+  margin-top: 12px;
+  line-height: 1.6;
+  font-weight: 700;
+  border-left: 2px solid var(--i-red);
+  padding-left: 10px;
+}
+body.intranet-mode .truth-text { display: block; }
+body.intranet-mode .svc-d, body.intranet-mode .csr-d {
+  text-decoration: line-through;
+  opacity: 0.35;
+}
+
+/* 요소 기밀화 */
+body.intranet-mode .svc, 
+body.intranet-mode .org-node, 
+body.intranet-mode .org-dept, 
+body.intranet-mode .rank-box, 
+body.intranet-mode .staff-card, 
+body.intranet-mode .news-item {
+  background: var(--i-card) !important;
+  border-color: var(--i-border) !important;
+  color: #888 !important;
+}
+body.intranet-mode .on-name { color: #fff !important; }
+body.intranet-mode .svc:hover, 
+body.intranet-mode .org-node:hover, 
+body.intranet-mode .staff-card:hover {
+  border-color: var(--i-red) !important;
+}
+
+/* 기본/사내망 정보 스위칭 조건부 뷰 */
+.intranet-info { display: none !important; }
+body.intranet-mode .public-info { display: none !important; }
+body.intranet-mode .intranet-info { display: block !important; }
+/* flex 컨텍스트가 필요한 intranet-info 요소 (로고 등) */
+body.intranet-mode a.intranet-info,
+body.intranet-mode div.intranet-info.int-alert { display: flex !important; }
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { width: 34px; height: 34px; flex-shrink: 0; }
+.logo-mark svg { width: 100%; height: 100%; display: block; }
+.logo-kr { font-size: 17px; font-weight: 800; color: var(--dark); letter-spacing: -0.01em; }
+.logo-en {
+  font-size: 9px; color: var(--gold); letter-spacing: 0.22em;
+  text-transform: uppercase; align-self: center; margin-left: 2px;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+/* ============================================================
+   HEADER — 햄버거 메뉴
+   ============================================================ */
+#hdr {
+  position: sticky; top: 0; z-index: 500;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  height: 62px;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s;
+}
+body.intranet-mode #hdr {
+  background: rgba(10,10,10,0.97) !important;
+  border-bottom: 1px solid var(--i-border);
+}
+.hdr-in {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 62px; width: 100%;
+}
+
+/* 햄버거 버튼 */
+.burger-btn {
+  width: 40px; height: 40px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; cursor: pointer; background: none; border: none; padding: 6px;
+  flex-shrink: 0; z-index: 600;
+}
+.burger-btn span {
+  display: block; width: 22px; height: 2px;
+  background: var(--dark); border-radius: 1px;
+  transition: transform 0.28s ease, opacity 0.2s ease, background 0.2s;
+}
+body.intranet-mode .burger-btn span { background: #888; }
+.burger-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.burger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.burger-btn.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* 드롭다운 패널 */
+.nav-panel {
+  position: fixed; top: 62px; right: 0;
+  width: 240px; max-height: 0; overflow: hidden;
+  background: rgba(255,255,255,0.98);
+  backdrop-filter: blur(12px);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  box-shadow: -4px 8px 32px rgba(0,0,0,0.10);
+  transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+  opacity: 0;
+  z-index: 490;
+}
+.nav-panel.open { max-height: 500px; opacity: 1; }
+body.intranet-mode .nav-panel {
+  background: rgba(10,10,10,0.98);
+  border-color: var(--i-border);
+  box-shadow: -4px 8px 32px rgba(200,0,0,0.08);
+}
+
+/* 드롭다운 내부 nav */
+nav { display: contents; }
+nav ul { list-style: none; margin: 0; padding: 10px 0; display: block; }
+nav ul li { display: block; }
+nav a {
+  display: block;
+  padding: 11px 26px;
+  font-size: 13px; color: var(--gray); text-decoration: none;
+  letter-spacing: 0.04em; transition: color .15s, background .15s;
+  border-left: 2px solid transparent;
+  white-space: nowrap;
+}
+nav a:hover {
+  color: var(--red);
+  border-left-color: var(--red);
+  background: rgba(122,21,21,0.04);
+}
+body.intranet-mode nav a { color: #555; }
+body.intranet-mode nav a:hover {
+  color: var(--i-red);
+  border-left-color: var(--i-red);
+  background: rgba(204,26,26,0.06);
+}
+body.intranet-mode nav a[href="#int-dashboard"] {
+  color: var(--i-red) !important;
+  font-weight: 700;
+  border-left-color: var(--i-red) !important;
+}
+
+/* 패널 구분선 */
+.nav-divider {
+  height: 1px; background: var(--border); margin: 6px 20px;
+}
+body.intranet-mode .nav-divider { background: var(--i-border); }
+
+/* 패널 하단 버튼 영역 */
+.nav-panel-foot {
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+}
+body.intranet-mode .nav-panel-foot { border-top-color: var(--i-border); }
+.nav-panel-foot .hdr-cta { width: 100%; text-align: center; font-size: 12px; padding: 9px; }
+.nav-panel-foot .int-out  { width: 100%; text-align: center; font-size: 12px; padding: 9px; }
+
+.hdr-cta {
+  font-size: 12px; padding: 8px 22px;
+  background: var(--red); color: white; border: none;
+  letter-spacing: 0.07em; cursor: pointer; transition: background .2s; display: block; width: 100%;
+}
+.hdr-cta:hover { background: var(--red-h); }
+
+.int-badge-pill { font-size: 9px; letter-spacing: .2em; color: var(--i-red); border: 1px solid var(--i-red); padding: 2px 8px; text-transform: uppercase; font-weight: bold; }
+.int-out { padding: 8px 20px; background: none; border: 1px solid #333; color: #888; font-size: 12px; cursor: pointer; transition: all .2s; letter-spacing: .04em; font-weight: bold; display: block; width: 100%; }
+.int-out:hover { border-color: var(--i-red); color: var(--i-red); background: #1a0808; }
+
+/* 사내망 상단 경고줄 — 하단 글리치 섹션에서 정의됨 */
+
+/* ============================================================
+   HERO & STATS (사내망 비활성화 섹션)
+   ============================================================ */
+body.intranet-mode #hero, 
+body.intranet-mode #statsbar, 
+body.intranet-mode #recruit { display: none !important; }
+
+#hero {
+  position: relative; height: 100vh; min-height: 620px;
+  background: #111; display: flex; align-items: center; overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(122,21,21,.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,21,21,.14) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.hero-grad {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 25% 50%, rgba(26,26,26,.2) 0%, rgba(10,10,10,.9) 100%);
+}
+.hero-content { position: relative; z-index: 2; padding: 0 80px; }
+.hero-sub {
+  font-size: 10.5px; letter-spacing: 0.32em; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 26px;
+  display: flex; align-items: center; gap: 18px;
+}
+.hero-sub::before { content:''; width:44px; height:1px; background:var(--gold); }
+h1.hero-h {
+  font-size: clamp(40px, 6.5vw, 88px);
+  font-weight: 800; color: #fff;
+  line-height: 1.08; letter-spacing: -0.03em;
+  margin-bottom: 26px;
+}
+h1.hero-h em { color: var(--red); font-style: normal; }
+.hero-p {
+  font-size: 15.5px; color: rgba(255,255,255,.5);
+  max-width: 460px; line-height: 1.85; margin-bottom: 44px;
+}
+.hero-btns { display: flex; gap: 16px; align-items: center; }
+.btn-p {
+  padding: 14px 34px; background: var(--red); color: white;
+  font-size: 13px; letter-spacing: 0.08em; text-decoration: none;
+  border: none; cursor: pointer; transition: background .2s; display: inline-block;
+}
+.btn-p:hover { background: var(--red-h); }
+.btn-g {
+  padding: 14px 34px; background: transparent; color: rgba(255,255,255,.65);
+  font-size: 13px; letter-spacing: 0.08em; text-decoration: none;
+  border: 1px solid rgba(255,255,255,.2); cursor: pointer;
+  transition: all .2s; display: inline-block;
+}
+.btn-g:hover { border-color: rgba(255,255,255,.5); color: white; }
+.scroll-hint {
+  position: absolute; bottom: 44px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: rgba(255,255,255,.25); font-size: 9.5px; letter-spacing: 0.25em;
+}
+.scroll-hint::after {
+  content:''; width:1px; height:38px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.25), transparent);
+}
+
+#statsbar { background: var(--red); }
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); }
+.stat { padding: 26px 32px; border-right: 1px solid rgba(255,255,255,.18); }
+.stat:last-child { border-right: none; }
+.stat-n { font-size: 30px; font-weight: 800; color: white; line-height: 1; }
+.stat-n sup { font-size: 14px; font-weight: 400; opacity:.7; }
+.stat-l { font-size: 11.5px; color: rgba(255,255,255,.6); letter-spacing: .1em; margin-top: 5px; }
+
+/* ============================================================
+   SECTIONS COMMON
+   ============================================================ */
+section { padding: 104px 0; }
+.sec-hd { margin-bottom: 56px; }
+.sec-t {
+  font-size: clamp(26px, 3vw, 44px);
+  font-weight: 800; color: var(--dark);
+  letter-spacing: -0.025em; line-height: 1.15;
+}
+.sec-rule { width: 38px; height: 3px; background: var(--red); margin-top: 18px; }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+#about { background: var(--white); }
+.about-g { display: grid; grid-template-columns: 1fr 1fr; gap: 88px; align-items: center; }
+.about-p { font-size: 14.5px; color: var(--gray); line-height: 1.95; margin-bottom: 18px; }
+.about-p:last-child { margin-bottom: 0; }
+.about-box {
+  background: var(--light); padding: 52px 48px;
+  border-left: 4px solid var(--red); position: relative;
+}
+.about-year {
+  position: absolute; top: -15px; right: -15px;
+  background: var(--red); color: white; padding: 10px 18px;
+  font-size: 12px; letter-spacing: .08em;
+}
+.about-q {
+  font-size: 18.5px; color: var(--dark); line-height: 1.75;
+  font-weight: 600; margin-bottom: 18px;
+}
+.about-cite { font-size: 11.5px; color: var(--gold); letter-spacing: .14em; }
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+#services { background: var(--light); }
+.svc-g { display: grid; grid-template-columns: repeat(2,1fr); gap: 3px; }
+.svc {
+  background: var(--white); padding: 52px 44px;
+  position: relative; overflow: hidden; cursor: default;
+  transition: background .32s;
+}
+.svc:hover { background: var(--dark); }
+.svc-n {
+  font-size: 64px; font-weight: 800; color: var(--border);
+  line-height: 1; margin-bottom: 24px; transition: color .32s;
+}
+.svc-t {
+  font-size: 22px; font-weight: 700; color: var(--dark);
+  margin-bottom: 14px; transition: color .32s;
+}
+body.intranet-mode .svc-t { color: #eee !important; }
+.svc-d { font-size: 14px; color: var(--gray); line-height: 1.85; transition: color .32s; }
+.svc-arr {
+  position: absolute; bottom: 44px; right: 44px;
+  font-size: 22px; color: var(--border); opacity: 0;
+  transition: all .32s;
+}
+.svc:hover .svc-n { color: rgba(122,21,21,.3); }
+.svc:hover .svc-t,
+.svc:hover .svc-d { color: rgba(255,255,255,.8); }
+.svc:hover .svc-arr { opacity: 1; color: var(--red); }
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+#projects { background: var(--white); }
+.proj-hd { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+.proj-more { font-size: 13px; color: var(--red); text-decoration: none; letter-spacing: .04em; }
+.proj-g { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.proj-img { height: 218px; position: relative; overflow: hidden; background: var(--dark); }
+.proj-img::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 100%);
+  opacity: .38;
+}
+.proj-lbl {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px; font-weight: 800; color: rgba(255,255,255,.1);
+  letter-spacing: -.04em;
+}
+.proj-info { padding: 20px 0; }
+.proj-tag { font-size: 10px; letter-spacing: .2em; color: var(--red); margin-bottom: 7px; }
+.proj-nm { font-size: 15.5px; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+
+/* ============================================================
+   ORG CHART (조직 기밀 은폐 자동화)
+   ============================================================ */
+#orgchart { background: var(--light); }
+.org-wrap { overflow-x: auto; }
+.org-tree { display: flex; flex-direction: column; align-items: center; min-width: 720px; }
+.org-connector-v { width: 1px; height: 32px; background: var(--border); margin: 0 auto; }
+.org-node {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 18px 28px; text-align: center; min-width: 130px;
+  position: relative; transition: border-color .2s, box-shadow .2s; cursor: default;
+}
+.org-node:hover { border-color: var(--red); box-shadow: 0 4px 18px rgba(122,21,21,.08); }
+.org-node.chair { background: var(--red); border-color: var(--red); min-width: 160px; }
+body.intranet-mode .org-node.chair { background: #3a0808; border-color: var(--i-red); }
+.org-node.chair .on-rank { color: rgba(255,255,255,.6); }
+.org-node.chair .on-name { color: white; }
+.org-node.exec { border-color: #c8c4be; min-width: 150px; padding: 16px 18px; }
+.on-rank { font-size: 10px; letter-spacing: .16em; color: var(--gold); margin-bottom: 5px; }
+.on-name { font-size: 16px; font-weight: 800; color: var(--dark); letter-spacing: -.01em; }
+.on-role { font-size: 10.5px; color: var(--gray); margin-top: 4px; letter-spacing: .04em; }
+
+.org-dept-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding-top: 32px; position: relative; }
+.org-dept-row::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 1px; height: 32px; background: var(--border);
+}
+.org-dept {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 13px 20px; text-align: center; min-width: 100px;
+  font-size: 12px; color: var(--gray); letter-spacing: .04em; transition: all .2s;
+}
+.org-dept:hover { border-color: var(--red); color: var(--red); }
+
+/* 대외 비공개 부서 감춤 및 사내망 표출 제어 */
+.secret-dept { display: none !important; }
+.secret-note { display: none !important; }
+body.intranet-mode .secret-dept {
+  display: block !important;
+  border: 1px dashed var(--i-red) !important;
+  color: #ff5555 !important;
+  background: #230a0a !important;
+}
+body.intranet-mode .secret-note { display: block !important; color: #7a4444 !important; }
+
+.rank-ladder { display: flex; align-items: center; gap: 0; justify-content: center; margin-top: 56px; flex-wrap: wrap; }
+.rank-item { display: flex; align-items: center; gap: 0; }
+.rank-box {
+  padding: 10px 20px; font-size: 12.5px; font-weight: 600;
+  letter-spacing: .06em; border: 1px solid var(--border);
+  background: var(--white); color: var(--gray); transition: all .2s;
+}
+.rank-box:hover { border-color: var(--red); color: var(--red); }
+.rank-box.top { background: var(--red); color: white; border-color: var(--red); }
+body.intranet-mode .rank-box.top { background: #520e0e; border-color: var(--i-red); }
+.rank-arrow { font-size: 12px; color: var(--border); padding: 0 6px; }
+.rank-note { font-size: 10.5px; color: var(--gray); margin-top: 18px; text-align: center; letter-spacing: .04em; }
+
+.staff-img-wrap {
+  width: 100%; aspect-ratio: 3/2;
+  overflow: hidden; margin-bottom: 18px;
+  background: var(--light);
+}
+.staff-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+  display: block;
+  transition: filter 0.4s ease;
+  filter: none;
+}
+body.intranet-mode .staff-img-wrap img {
+  filter: grayscale(100%) contrast(1.05);
+}
+#staff { background: var(--white); }
+.staff-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.staff-card {
+  border: 1px solid var(--border); padding: 30px 28px 26px;
+  position: relative; transition: border-color .28s, transform .28s; cursor: default;
+}
+.staff-card:hover { border-color: var(--red); transform: translateY(-3px); }
+.staff-name-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.staff-name { font-size: 22px; font-weight: 800; color: var(--dark); letter-spacing: -.02em; }
+body.intranet-mode .staff-name { color: #fff; }
+.staff-age { font-size: 12px; color: var(--gray); }
+.staff-role {
+  font-size: 12px; font-weight: 700; color: var(--red);
+  margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+  letter-spacing: .04em;
+}
+body.intranet-mode .staff-role { color: var(--i-red); border-bottom-color: var(--i-border); }
+.staff-stat {
+  font-size: 11.5px; color: var(--gold); letter-spacing: .04em;
+  margin-bottom: 10px; font-family: 'Courier New', monospace;
+}
+body.intranet-mode .staff-stat { color: #6a5a3a; }
+.staff-desc {
+  font-size: 12.5px; color: var(--gray); line-height: 1.78;
+  margin-bottom: 14px;
+}
+body.intranet-mode .staff-desc { color: #555; }
+.staff-desc li {
+  list-style: none; padding-left: 0; margin-bottom: 4px;
+}
+.staff-desc li::before { content: '— '; color: var(--red); font-weight: bold; }
+body.intranet-mode .staff-desc li::before { color: var(--i-red); }
+.staff-kw { display: flex; flex-wrap: wrap; gap: 6px; }
+.staff-kw span {
+  font-size: 11px; color: var(--gray); background: var(--light);
+  padding: 4px 10px; letter-spacing: .02em;
+}
+body.intranet-mode .staff-kw span { background: #1a1a1a; color: #666; }
+.staff-card-accent {
+  position: absolute; top: 0; right: 0; width: 3px; height: 0;
+  background: var(--red); transition: height .3s ease;
+}
+.staff-card:hover .staff-card-accent { height: 100%; }
+
+/* ============================================================
+   CSR
+   ============================================================ */
+#csr { background: var(--dark); padding: 104px 0; }
+#csr .eyebrow { color: var(--gold); }
+#csr .sec-t { color: white; }
+.csr-g { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,.08); margin-top: 56px; }
+.csr-c { background: var(--dark); padding: 42px 34px; border-top: 3px solid transparent; transition: border-color .28s; }
+.csr-c:hover { border-top-color: var(--red); }
+body.intranet-mode .csr-c { background: var(--i-card); }
+.csr-ico { font-size: 30px; margin-bottom: 20px; }
+.csr-t { font-size: 18px; font-weight: 700; color: white; margin-bottom: 12px; }
+.csr-d { font-size: 13.5px; color: rgba(255,255,255,.38); line-height: 1.85; }
+
+/* ============================================================
+   NEWS
+   ============================================================ */
+#news { background: var(--light); }
+.news-g { display: grid; grid-template-columns: 3fr 2fr; gap: 52px; }
+.news-item { background: white; padding: 28px 28px; margin-bottom: 2px; display: flex; gap: 22px; cursor: pointer; transition: background .2s; }
+.news-item:hover { background: #f8f7f5; }
+body.intranet-mode .news-item:hover { background: #161616 !important; }
+.ndate { min-width: 52px; text-align: center; padding-top: 2px; }
+.ndate-d { font-size: 26px; font-weight: 800; color: var(--red); line-height: 1; }
+body.intranet-mode .ndate-d { color: var(--i-red); }
+.ndate-ym { font-size: 10.5px; color: var(--gray); letter-spacing: .04em; }
+.news-ti { font-size: 14.5px; font-weight: 700; color: var(--dark); margin-bottom: 7px; }
+body.intranet-mode .news-ti { color: #eee; }
+.news-sm { font-size: 13px; color: var(--gray); line-height: 1.72; }
+.notice-h { font-size: 15.5px; font-weight: 800; color: var(--dark); margin-bottom: 18px; }
+body.intranet-mode .notice-h { color: #fff; }
+.noti { padding: 15px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+body.intranet-mode .noti { border-bottom-color: var(--i-border); }
+.noti:last-child { border-bottom: none; }
+.noti-badge { display: inline-block; font-size: 10px; padding: 2px 8px; background: var(--red); color: white; margin-bottom: 6px; letter-spacing: .04em; }
+.noti-badge.b2 { background: var(--gray); }
+.noti-t { font-size: 13px; color: var(--dark); line-height: 1.55; }
+body.intranet-mode .noti-t { color: #999; }
+.noti-dt { font-size: 11px; color: var(--gray); margin-top: 4px; }
+
+/* ============================================================
+   RECRUIT BANNER
+   ============================================================ */
+#recruit { background: var(--red); padding: 64px 0; }
+.rec-in { display: flex; align-items: center; justify-content: space-between; }
+.rec-in h3 { font-size: 26px; font-weight: 800; color: white; }
+.rec-in p { font-size: 14px; color: rgba(255,255,255,.65); margin-top: 8px; }
+.btn-rec {
+  padding: 16px 44px; background: white; color: var(--red);
+  font-size: 13.5px; font-weight: 700; letter-spacing: .05em;
+  text-decoration: none; cursor: pointer; transition: opacity .2s; white-space: nowrap;
+}
+.btn-rec:hover { opacity: .88; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer { background: var(--dark); padding: 64px 0 0; border-top: 1px solid #111; }
+.ft-g { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 52px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.ft-addr { margin-top: 18px; font-size: 11.5px; color: rgba(255,255,255,.3); line-height: 2.1; }
+.ft-ht { font-size: 11px; letter-spacing: .17em; color: rgba(255,255,255,.4); text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.ft-ul { list-style: none; }
+.ft-ul li { margin-bottom: 10px; }
+.ft-ul a { font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; transition: color .2s; }
+.ft-ul a:hover { color: rgba(255,255,255,.75); }
+.ft-bot { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.ft-copy { font-size: 11px; color: rgba(255,255,255,.2); }
+.ft-logo .logo-kr { color: rgba(255,255,255,.6); }
+.ft-logo .logo-en { color: var(--gold); }
+
+/* Dragon Seal — 숨겨진 진입점 */
+#seal {
+  width: 52px; height: 52px; cursor: pointer;
+  opacity: .85; transition: opacity .4s, transform .4s, filter .4s;
+  user-select: none;
+  animation: sealBreath 1.4s ease-in-out infinite;
+  position: relative;
+}
+#seal::after {
+  content: 'SYSTEM';
+  position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+  font-size: 8px; letter-spacing: .18em; color: rgba(255,255,255,0.18);
+  font-family: 'Courier New', monospace; white-space: nowrap;
+  transition: color .3s;
+}
+#seal:hover {
+  opacity: 1;
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 10px rgba(122,21,21,1)) drop-shadow(0 0 22px rgba(204,26,26,0.8));
+  animation: none;
+}
+#seal:hover::after { color: rgba(204,26,26,0.9); }
+#seal svg { width: 100%; height: 100%; }
+@keyframes sealBreath {
+  0%, 100% {
+    opacity: .4;
+    filter: drop-shadow(0 0 0px rgba(122,21,21,0));
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px rgba(204,26,26,0.95)) drop-shadow(0 0 24px rgba(122,21,21,0.6));
+    transform: scale(1.08);
+  }
+}
+
+/* 푸터 하단 힌트 라인 */
+.ft-hint-row {
+  border-top: 1px solid #1a1a1a;
+  margin-top: 18px; padding: 14px 0 20px;
+  text-align: center;
+}
+.ft-hint-txt {
+  font-size: 11px; color: #2a2a2a; letter-spacing: .04em;
+  font-family: 'Courier New', monospace;
+}
+
+/* ============================================================
+   PASSWORD MODAL
+   ============================================================ */
+#pw-wrap { display: none; position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,.88); align-items: center; justify-content: center; }
+#pw-wrap.on { display: flex; }
+.pw-box { background: #080808; border: 1px solid #222; padding: 52px 48px; width: 360px; text-align: center; position: relative; animation: fadeUp .3s ease; }
+@keyframes fadeUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pw-seal-ico { width: 56px; height: 56px; margin: 0 auto 22px; }
+.pw-seal-ico svg { width: 100%; height: 100%; }
+.pw-label { font-size: 11px; letter-spacing: .22em; color: #444; text-transform: uppercase; margin-bottom: 30px; }
+.pw-input {
+  width: 100%; background: #0f0f0f; border: 1px solid #2a2a2a; color: white;
+  padding: 14px 16px; font-size: 14.5px; letter-spacing: .15em; text-align: center;
+  margin-bottom: 14px; outline: none; font-family: inherit; transition: border-color .2s;
+}
+.pw-input:focus { border-color: #7A1515; }
+.pw-input::placeholder { color: #333; letter-spacing: .1em; }
+.pw-ok { width: 100%; padding: 14px; background: var(--red); color: white; border: none; font-size: 13px; letter-spacing: .1em; cursor: pointer; transition: background .2s; }
+.pw-ok:hover { background: var(--red-h); }
+.pw-err  { font-size: 11.5px; color: #993333; margin-top: 12px; height: 18px; letter-spacing: .04em; }
+.pw-hint { font-size: 10.5px; color: #333; margin-top: 20px; letter-spacing: .08em; font-family: 'Courier New', monospace; border-top: 1px solid #1a1a1a; padding-top: 14px; }
+.pw-x { position: absolute; top: 16px; right: 18px; background: none; border: none; color: #333; font-size: 18px; cursor: pointer; padding: 6px; line-height: 1; }
+.pw-x:hover { color: #666; }
+@keyframes shake { 0%,100%{ transform: translateX(0); } 20%,60%{ transform: translateX(-7px); } 40%,80%{ transform: translateX(7px); } }
+.shake { animation: shake .4s ease; }
+
+/* ============================================================
+   GLITCH TRANSITION OVERLAY — 해킹 컨셉 강화
+   ============================================================ */
+#glitch-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9005;
+  background: #060000; overflow: hidden;
+  align-items: center; justify-content: center; flex-direction: column;
+}
+#glitch-overlay.on { display: flex; animation: glitchBgFlicker 0.18s step-end infinite; }
+@keyframes glitchBgFlicker {
+  0%, 88%, 100% { background: #060000; }
+  89% { background: #0d0000; } 90% { background: #030000; }
+  91% { background: #090000; } 93% { background: #0a0004; } 94% { background: #060000; }
+}
+/* 스캔라인 */
+.glitch-scanlines {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.22) 3px, rgba(0,0,0,0.22) 4px);
+  animation: scanSlide 5s linear infinite;
+}
+@keyframes scanSlide { from { background-position: 0 0; } to { background-position: 0 300px; } }
+
+/* 흐르는 코드 배경 */
+.glitch-code-bg {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  font-family: 'Courier New', monospace; font-size: 11px;
+  color: rgba(140,10,10,0.18); line-height: 1.6;
+  overflow: hidden; padding: 10px;
+  white-space: pre-wrap; word-break: break-all;
+  animation: codeFade 0.3s step-end infinite;
+}
+@keyframes codeFade { 0%,79%,100%{opacity:1;} 80%{opacity:0.5;} 81%{opacity:1;} }
+
+/* 적색 비네트 */
+.glitch-vignette {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(80,0,0,0.65) 100%);
+  animation: vigPulse 1.8s ease-in-out infinite;
+}
+@keyframes vigPulse { 0%,100%{opacity:0.7;} 50%{opacity:1;} }
+
+/* 찢김 노이즈 */
+.glitch-tears { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.glitch-tear { position: absolute; left: 0; right: 0; background: rgba(200,10,10,0.6); }
+/* 사이드 노이즈 바 */
+.glitch-side {
+  position: absolute; top: 0; bottom: 0; width: 3px; z-index: 5; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(204,26,26,0.8), transparent);
+  animation: sideGlitch 0.25s step-end infinite;
+}
+.glitch-side.left { left: 0; }
+.glitch-side.right { right: 0; }
+@keyframes sideGlitch {
+  0%,70%,100%{opacity:0;} 71%{opacity:1;left:0;} 72%{opacity:1;left:2px;} 73%{opacity:0;}
+  85%{opacity:0.8;} 86%{opacity:0;}
+}
+
+/* 상단 경고 배너 (글리치 오버레이 내부) */
+.glitch-warn-bar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 12;
+  background: rgba(100,5,5,0.85); border-bottom: 1px solid #440000;
+  padding: 7px 22px; font-family: 'Courier New', monospace;
+  font-size: 10px; color: #ff4444; letter-spacing: 0.18em;
+  display: flex; align-items: center; justify-content: space-between;
+  animation: warnBlink 0.22s step-end infinite;
+}
+@keyframes warnBlink { 0%,91%,100%{opacity:1;} 92%{opacity:0.3;} 93%{opacity:1;} }
+.glitch-warn-dot { width: 6px; height: 6px; background: #ff2222; border-radius: 50%; animation: blink 0.7s step-end infinite; margin-right: 8px; }
+
+/* 메인 콘텐츠 */
+.glitch-content {
+  position: relative; z-index: 10; text-align: center;
+  width: 380px; font-family: 'Courier New', monospace;
+  border: 1px solid rgba(180,10,10,0.3);
+  padding: 40px 36px 34px;
+  background: rgba(6,0,0,0.82);
+  box-shadow: 0 0 40px rgba(150,0,0,0.25), inset 0 0 30px rgba(80,0,0,0.1);
+  animation: boxFlicker 0.2s step-end infinite;
+}
+@keyframes boxFlicker {
+  0%,85%,100%{border-color:rgba(180,10,10,0.3);}
+  86%{border-color:rgba(255,0,0,0.7);}
+  87%{border-color:rgba(180,10,10,0.3);}
+}
+.glitch-logo {
+  font-size: 58px; font-weight: 900; color: #CC1A1A;
+  letter-spacing: 0.1em; margin-bottom: 10px; display: inline-block;
+  font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  animation: logoGlitch 0.22s step-end infinite;
+}
+@keyframes logoGlitch {
+  0%, 72%, 100% { text-shadow: none; transform: none; }
+  73% { text-shadow: -6px 0 rgba(0,255,200,0.8), 6px 0 rgba(255,0,80,0.8); transform: translateX(7px) skewX(-3deg); }
+  74% { text-shadow: 6px 0 rgba(0,255,200,0.8), -6px 0 rgba(255,0,80,0.8); transform: translateX(-7px); }
+  75% { text-shadow: none; transform: none; }
+  86% { text-shadow: 4px 0 rgba(255,0,0,0.6), -4px 0 rgba(0,100,255,0.6); transform: skewX(6deg); }
+  87% { text-shadow: none; transform: none; }
+  95% { text-shadow: -3px 1px rgba(0,255,100,0.5), 3px -1px rgba(255,0,0,0.5); transform: translateY(-2px); }
+  96% { text-shadow: none; transform: none; }
+}
+.glitch-hack-label {
+  font-size: 9px; color: #ff3333; letter-spacing: 0.3em;
+  text-transform: uppercase; margin-bottom: 18px; opacity: 0.85;
+  animation: subFlicker 0.18s step-end infinite;
+  border: 1px solid rgba(180,10,10,0.4); padding: 3px 10px; display: inline-block;
+}
+.glitch-sub {
+  font-size: 10px; color: #444; letter-spacing: 0.32em;
+  text-transform: uppercase; margin-bottom: 26px;
+  animation: subFlicker 0.14s step-end infinite;
+}
+@keyframes subFlicker { 0%,83%,100%{opacity:1;} 84%{opacity:0.12;} 85%{opacity:1;} 91%{opacity:0.55;} 92%{opacity:1;} }
+.glitch-bar-wrap {
+  width: 100%; height: 2px; background: #1a0606; margin-bottom: 14px;
+  position: relative; overflow: hidden;
+}
+.glitch-bar-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(to right, #7A1515, #FF2828);
+  transition: width 0.09s ease; position: relative;
+}
+.glitch-bar-fill::after {
+  content: ''; position: absolute; right: -1px; top: -3px;
+  width: 3px; height: 8px; background: white; opacity: 0.9;
+  animation: tipBlink 0.11s step-end infinite;
+}
+@keyframes tipBlink { 0%,70%{opacity:0.9;} 71%{opacity:0.1;} 72%{opacity:0.9;} }
+.glitch-status {
+  font-size: 10.5px; color: #882020; letter-spacing: 0.2em;
+  height: 20px; animation: statusBlink 0.14s step-end infinite;
+}
+@keyframes statusBlink { 0%,87%,100%{opacity:1;} 88%{opacity:0;} 89%{opacity:1;} }
+.glitch-granted {
+  font-size: 14px; font-weight: 700; color: #CC1A1A; letter-spacing: 0.55em;
+  display: none; text-shadow: 0 0 14px rgba(204,26,26,0.85);
+  animation: grantedPulse 0.16s step-end infinite;
+}
+@keyframes grantedPulse {
+  0%,89%,100%{opacity:1;text-shadow:0 0 14px rgba(204,26,26,0.85);}
+  90%{opacity:0.25;text-shadow:none;}
+  91%{opacity:1;text-shadow:0 0 22px rgba(204,26,26,1);}
+}
+/* 하단 해킹 메타 텍스트 */
+.glitch-meta {
+  position: absolute; bottom: 22px; left: 0; right: 0; z-index: 12;
+  font-family: 'Courier New', monospace; font-size: 9px;
+  color: rgba(120,20,20,0.7); letter-spacing: 0.1em; text-align: center;
+  animation: subFlicker 0.25s step-end infinite;
+}
+
+/* ============================================================
+   INTRANET MODE — 해킹 노출 전역 스타일 강화
+   ============================================================ */
+/* 사내망 진입 후 상단 경고 배너 깜빡임 강화 */
+.int-alert { background: #0d0404; border-bottom: 1px solid #1e0404; padding: 9px 40px; font-size: 11px; color: #7a3333; letter-spacing: .07em; display: none; align-items: center; gap: 18px; width: 100%; justify-content: center; font-family: 'Courier New', monospace; }
+.alert-dot { width: 7px; height: 7px; flex-shrink: 0; background: var(--i-red); border-radius: 50%; animation: blink 1.2s infinite; box-shadow: 0 0 5px rgba(204,26,26,0.8); }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.1;} }
+body.intranet-mode .int-alert { display: flex; animation: alertFlicker 4s step-end infinite; }
+@keyframes alertFlicker { 0%,97%,100%{background:#0d0404;} 98%{background:#1a0404;} 99%{background:#0a0202;} }
+
+/* 사내망 모드 — 전역 노이즈 오버레이 */
+body.intranet-mode::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+  animation: scanSlide 8s linear infinite;
+}
+/* 사내망 모드 — 적색 비네트 */
+body.intranet-mode::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(60,0,0,0.45) 100%);
+}
+
+/* ============================================================
+   PURE INTRANET MODULES (사내망 모드 전용 신규 섹션)
+   ============================================================ */
+#int-dashboard, #int-notices, #int-files { display: none; }
+body.intranet-mode #int-dashboard, 
+body.intranet-mode #int-notices, 
+body.intranet-mode #int-files { display: block; background: var(--i-bg); padding: 80px 0; }
+
+.i-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 30px; }
+.isc { background: var(--i-card); border: 1px solid var(--i-border); padding: 24px 22px; }
+.isc.alert { border-color: #2a1010; }
+.isc-lbl { font-size: 10px; color: #555; letter-spacing: .14em; margin-bottom: 12px; }
+.isc-n { font-size: 26px; font-weight: 800; color: #aaa; line-height: 1; }
+.isc-n.r { color: var(--i-red); }
+.isc-n.g { color: var(--i-green); }
+.isc-sub { font-size: 10.5px; color: #444; margin-top: 6px; }
+
+.igrid { display: grid; grid-template-columns: 3fr 2fr; gap: 18px; margin-bottom: 24px; }
+.ipanel { background: var(--i-card); border: 1px solid var(--i-border); margin-bottom: 18px; }
+.iphdr { padding: 14px 20px; border-bottom: 1px solid var(--i-border); display: flex; align-items: center; justify-content: space-between; }
+.ipttl { font-size: 11px; letter-spacing: .16em; color: #777; text-transform: uppercase; font-weight: bold; }
+.ipbadge { font-size: 10px; padding: 2px 8px; background: #1a0808; color: var(--i-red); border: 1px solid #2e1010; letter-spacing: .04em; }
+.ipbadge.g { background: #081a08; color: var(--i-green); border-color: #102e10; }
+.ipbadge.n { background: #111; color: #444; border-color: #1e1e1e; }
+
+.it { width: 100%; border-collapse: collapse; }
+.it th { padding: 10px 16px; text-align: left; font-size: 10px; letter-spacing: .1em; color: #444; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid #181818; }
+.it td { padding: 13px 16px; font-size: 12px; color: #777; border-bottom: 1px solid #141414; }
+.it tr:last-child td { border-bottom: none; }
+.it tr:hover td { background: #141414; color: #999; }
+
+.sb { display: inline-block; font-size: 10px; padding: 2px 8px; letter-spacing: .04em; }
+.sb.a { background: #081808; color: #3A9A3A; border: 1px solid #102810; }
+.sb.w { background: #181808; color: #9A7A1A; border: 1px solid #28280a; }
+.sb.d { background: #180808; color: var(--i-red); border: 1px solid #280808; }
+.sb.z { background: #080808; color: #444; border: 1px solid #181818; }
+
+.b2w { background: #0d0505; border: 1px solid #2a0a0a; display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; }
+.b2w-ico { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.b2w-txt { font-size: 11.5px; color: #663333; line-height: 1.65; }
+
+.nitem { padding: 15px 20px; border-bottom: 1px solid #141414; cursor: pointer; transition: background .14s; }
+.nitem:last-child { border-bottom: none; }
+.nitem:hover { background: #141414; }
+.nitem-top { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.nlvl { font-size: 10px; padding: 1px 6px; }
+.nlvl.u { background: var(--i-red); color: white; }
+.nlvl.c { background: #9A7A1A; color: #111; }
+.nlvl.i { background: #0f2040; color: #5a88cc; }
+.nlvl.z { color: #2a2a2a; border: 1px solid #1e1e1e; }
+.ntitle { font-size: 12.5px; color: #777; }
+.nitem:hover .ntitle { color: #999; }
+.nmeta { font-size: 11px; color: #3a3a3a; }
+
+.fitem { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-bottom: 1px solid #131313; cursor: pointer; transition: background .14s; }
+.fitem:last-child { border-bottom: none; }
+.fitem:hover { background: #141414; }
+.fico { font-size: 15px; opacity: .45; }
+.fnm { font-size: 12px; color: #666; flex: 1; }
+.fitem:hover .fnm { color: #888; }
+.fcls { font-size: 10px; color: var(--i-red); border: 1px solid #2e1010; padding: 1px 6px; }
+.fdt { font-size: 10.5px; color: #333; }
+
+/* ============================================================
+   RESPONSIVE (모바일 & PC 글자 깨짐 및 레이아웃 안정화)
+   ============================================================ */
+/* ============================================================
+   RESPONSIVE — 태블릿
+   ============================================================ */
+@media(max-width: 992px) {
+  .about-g       { grid-template-columns: 1fr; gap: 44px; }
+  .svc-g         { grid-template-columns: 1fr; }
+  .proj-g        { grid-template-columns: 1fr 1fr; }
+  .news-g        { grid-template-columns: 1fr; }
+  .ft-g          { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .i-stats       { grid-template-columns: repeat(2,1fr); }
+  .igrid         { grid-template-columns: 1fr; }
+  .staff-g       { grid-template-columns: 1fr 1fr; }
+  .csr-g         { grid-template-columns: 1fr 1fr; }
+  .int-alert     { padding: 10px 20px; flex-direction: column; text-align: center; gap: 5px; font-size: 10px; }
+  /* 조직도 수평 스크롤 제거 */
+  .org-wrap      { overflow-x: visible; }
+  .org-tree      { min-width: 0; }
+  /* 채용 배너 */
+  .rec-in        { flex-direction: column; gap: 24px; text-align: center; }
+  .btn-rec       { width: 100%; text-align: center; }
+}
+
+/* ============================================================
+   RESPONSIVE — 모바일
+   ============================================================ */
+@media(max-width: 600px) {
+  /* 기본 */
+  .container     { padding: 0 16px; }
+  section        { padding: 64px 0; }
+
+  /* 헤더 로고 */
+  .logo-en       { display: none; }
+
+  /* 드롭다운 패널 — 전체 너비 */
+  .nav-panel     { width: 100%; border-left: none; right: 0; }
+
+  /* 히어로 */
+  .hero-content  { padding: 0 16px; }
+  h1.hero-h      { font-size: clamp(30px, 9vw, 48px); }
+  .hero-p        { font-size: 14px; }
+  .hero-btns     { flex-direction: column; gap: 12px; }
+  .btn-p, .btn-g { width: 100%; text-align: center; padding: 14px 20px; }
+
+  /* 통계바 */
+  .stats-row     { grid-template-columns: repeat(2,1fr); }
+  .stat          { padding: 16px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .stat:nth-child(even) { border-right: none; }
+  .stat-n        { font-size: 22px; }
+
+  /* 사업영역 */
+  .svc           { padding: 36px 24px; }
+  .svc-n         { font-size: 44px; }
+
+  /* 프로젝트 */
+  .proj-g        { grid-template-columns: 1fr; }
+
+  /* 조직도 — 모바일 세로 계단형 */
+  .org-wrap      { overflow-x: visible; }
+  .org-tree      { min-width: 0; width: 100%; }
+
+  /* 이사진 가로 줄 → 세로 스택 */
+  .org-tree > div[style*="display:flex"] {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  /* 이사진 사이 가로 연결선 숨김 */
+  .org-tree > div[style*="display:flex"] > div[style*="position:absolute"] {
+    display: none !important;
+  }
+  .org-node      { min-width: 0 !important; width: 100%; max-width: 280px; box-sizing: border-box; }
+  .org-node.exec { min-width: 0 !important; width: 100%; max-width: 280px; }
+
+  /* 부서 태그 — 2열 그리드 */
+  .org-dept-row  { display: grid !important; grid-template-columns: 1fr 1fr; gap: 6px; padding-top: 20px; }
+  .org-dept-row::before { display: none; }
+  .org-dept      { text-align: center; }
+
+  /* 직급 사다리 — 2열 그리드, 화살표 숨김 */
+  .rank-ladder   { display: grid !important; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .rank-item     { flex-direction: column; align-items: center; }
+  .rank-arrow    { display: none; }
+  .rank-box      { width: 100%; text-align: center; padding: 10px 4px; font-size: 11px; }
+
+  /* 임직원 카드 */
+  .staff-g       { grid-template-columns: 1fr; }
+  .staff-card    { padding: 22px 18px 20px; }
+
+  /* CSR */
+  .csr-g         { grid-template-columns: 1fr; }
+  .csr-c         { padding: 28px 22px; }
+
+  /* 뉴스 */
+  .news-item     { padding: 18px 16px; gap: 14px; }
+  .ndate-d       { font-size: 20px; }
+
+  /* 채용 배너 */
+  .rec-in        { flex-direction: column; gap: 20px; text-align: center; }
+  .rec-in h3     { font-size: 20px; }
+  .btn-rec       { width: 100%; text-align: center; padding: 14px 20px; }
+
+  /* 푸터 */
+  .ft-g          { grid-template-columns: 1fr; gap: 28px; }
+  .ft-bot        { flex-direction: column; gap: 16px; align-items: flex-start; }
+
+  /* 비밀번호 모달 */
+  .pw-box        { width: calc(100vw - 40px); padding: 36px 24px; }
+
+  /* 글리치 오버레이 */
+  .glitch-content { width: calc(100vw - 40px); padding: 28px 20px; }
+  .glitch-logo   { font-size: 40px; }
+  .glitch-warn-bar { font-size: 8px; flex-wrap: wrap; gap: 4px; padding: 6px 12px; }
+
+  /* ── 사내망 전용 모바일 ── */
+
+  /* 통계 카드: 1열 */
+  .i-stats       { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .isc           { padding: 16px 14px; }
+  .isc-n         { font-size: 20px; }
+
+  /* 대시보드 그리드: 1열 */
+  .igrid         { grid-template-columns: 1fr; }
+
+  /* 테이블 — 가로 스크롤 래퍼 */
+  .it-wrap       { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .it            { min-width: 480px; }
+  .it th, .it td { padding: 10px 12px; font-size: 11px; }
+
+  /* 파일 목록 */
+  .fitem         { flex-wrap: wrap; gap: 6px; padding: 12px 14px; }
+  .fnm           { font-size: 11px; word-break: break-all; flex-basis: 100%; }
+
+  /* 내부공지 */
+  .nitem         { padding: 12px 14px; }
+  .ntitle        { font-size: 11.5px; }
+
+  /* 경고 배너 */
+  .int-alert     { font-size: 9.5px; padding: 8px 14px; gap: 4px; }
+
+  /* 사이드바 배지 */
+  .sb            { font-size: 9px; padding: 1px 5px; }
+
+  /* about 박스 */
+  .about-box     { padding: 32px 24px; }
+  .about-q       { font-size: 16px; }
+}
+
+/* ============================================================
+   터치 디바이스 — hover 고착 방지 & 탭 영역 확보
+   ============================================================ */
+@media (hover: none) {
+  /* 카드 hover 올라가는 효과 제거 */
+  .staff-card:hover    { transform: none; }
+  .svc:hover           { background: var(--white); }
+  .svc:hover .svc-t,
+  .svc:hover .svc-d    { color: inherit; }
+  .svc:hover .svc-n    { color: var(--border); }
+  .svc:hover .svc-arr  { opacity: 0; }
+  /* 용 씰 탭 영역 확보 */
+  #seal                { opacity: 0.65; min-width: 48px; min-height: 48px; }
+  /* 버거 버튼 탭 영역 */
+  .burger-btn          { min-width: 48px; min-height: 48px; }
+}
+
+/* 극소형 화면 */
+@media(max-width: 380px) {
+  .i-stats       { grid-template-columns: 1fr; }
+  .stats-row     { grid-template-columns: 1fr; }
+  .stat          { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="dragon-mark" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="19" fill="#0F0707"/>
+      <circle cx="20" cy="20" r="19" fill="none" stroke="#7A1515" stroke-width="1"/>
+      <path d="M10 27 C 9 21, 13 15, 19 15 C 25 15, 27 19, 24 22 C 22 24, 19 22, 20 19 C 21 16.5, 25 16, 28 18.5 C 31 21, 30 26, 26 28.5 C 22 31, 15 31, 11 28" fill="none" stroke="#9b2020" stroke-width="2.1" stroke-linecap="round"/>
+      <path d="M26 28.5 C 28.5 29.5, 31 28.5, 31.5 26.5 C 32 25, 30.5 24, 29 25 L 26 28.5 Z" fill="#CC1A1A"/>
+      <circle cx="29.4" cy="25.8" r="0.7" fill="#0F0707"/>
+      <path d="M29.5 24.2 L 31.2 22" stroke="#CC1A1A" stroke-width="1" stroke-linecap="round"/>
+      <circle cx="14" cy="13" r="2" fill="#B8A48A" opacity="0.85"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ================================================
+     HEADER — 햄버거 메뉴
+     ================================================ -->
+<header id="hdr">
+  <div class="container" style="width:100%;">
+    <div class="hdr-in">
+
+      <!-- 대외용 로고 -->
+      <a href="#" class="logo public-info">
+        <span class="logo-mark"><svg viewBox="0 0 40 40"><use href="#dragon-mark"/></svg></span>
+        <span class="logo-kr">천우건설</span>
+        <span class="logo-en">CHEONWOO CONSTRUCTION</span>
+      </a>
+      <!-- 내부망 로고 -->
+      <a href="#" class="logo intranet-info">
+        <span class="logo-mark"><svg viewBox="0 0 40 40"><use href="#dragon-mark"/></svg></span>
+        <span class="logo-kr" style="color:var(--i-red)">天宇 사내망</span>
+        <span class="int-badge-pill">INTERNAL</span>
+      </a>
+
+      <!-- 햄버거 버튼 -->
+      <button class="burger-btn" id="burger-btn" onclick="toggleNav()" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- 드롭다운 패널 (헤더 바깥, body 직속) -->
+<div class="nav-panel" id="nav-panel">
+  <!-- 퍼블릭 메뉴 -->
+  <nav>
+    <ul class="nav-public public-info">
+      <li><a href="#about"    onclick="closeNav()">회사소개</a></li>
+      <li><a href="#services" onclick="closeNav()">사업영역</a></li>
+      <li><a href="#projects" onclick="closeNav()">시공실적</a></li>
+      <li><a href="#orgchart" onclick="closeNav()">조직구성</a></li>
+      <li><a href="#staff"    onclick="closeNav()">임직원</a></li>
+      <li><a href="#csr"      onclick="closeNav()">사회공헌</a></li>
+      <li><a href="#news"     onclick="closeNav()">공지사항</a></li>
+    </ul>
+    <!-- 내부망 메뉴 -->
+    <ul class="nav-intranet intranet-info">
+      <li><a href="#int-dashboard" onclick="closeNav()">대시보드</a></li>
+      <li><a href="#about"         onclick="closeNav()">기업세탁 (소개)</a></li>
+      <li><a href="#services"      onclick="closeNav()">실제사업목적</a></li>
+      <li><a href="#orgchart"      onclick="closeNav()">숙청체계 (조직)</a></li>
+      <li><a href="#staff"         onclick="closeNav()">핵심인원배치</a></li>
+      <li><a href="#int-notices"   onclick="closeNav()">내부공지</a></li>
+      <li><a href="#int-files"     onclick="closeNav()">기밀보관함</a></li>
+    </ul>
+  </nav>
+  <div class="nav-divider"></div>
+  <div class="nav-panel-foot">
+    <button class="hdr-cta public-info">투자자 정보</button>
+    <button class="int-out intranet-info" onclick="closeNav(); closeInt();">접속 종료</button>
+  </div>
+</div>
+
+<!-- 사내망 활성화 전용 경고 띠 -->
+<div class="int-alert intranet-info">
+  <div class="alert-dot"></div>
+  <span>최고 권한 세션 가동 중 — 접속 기록 원격 보관 중. 외부 유출 시 엄중 처벌.</span>
+  <span style="color:var(--i-red); font-weight: bold;">[긴급 수배] 마포 구역 밀착 추적 기자 동향 추적 요망</span>
+</div>
+
+<!-- ================================================
+     PURE INTRANET: DASHBOARD MODULE (사업현황 테이블 통합 완료)
+     ================================================ -->
+<section id="int-dashboard">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow" style="color: var(--i-red);">INTERNAL CONTROL</span>
+      <h2 class="sec-t">천우 통합 관리 대시보드</h2>
+      <div class="sec-rule" style="background: var(--i-red);"></div>
+    </div>
+
+    <!-- 통계 블록 -->
+    <div class="i-stats">
+      <div class="isc">
+        <div class="isc-lbl">진행 중 기밀 수주</div>
+        <div class="isc-n">7 <span style="font-size:13px;color:#333;">건</span></div>
+        <div class="isc-sub">인허가 압박 진행 3건</div>
+      </div>
+      <div class="isc">
+        <div class="isc-lbl">수금 및 채권 회수율</div>
+        <div class="isc-n g">94.2 <span style="font-size:13px;color:#333;">%</span></div>
+        <div class="isc-sub">이번 달 할당량 초과</div>
+      </div>
+      <div class="isc">
+        <div class="isc-lbl">행동대 즉시 가용 인원</div>
+        <div class="isc-n">12 <span style="font-size:13px;color:#333;">명</span></div>
+        <div class="isc-sub">본사 2층 대기 중</div>
+      </div>
+      <div class="isc alert">
+        <div class="isc-lbl">⚠ 미결 긴급 숙청·처분 건</div>
+        <div class="isc-n r">3</div>
+        <div class="isc-sub">48시간 기한 제한 조치</div>
+      </div>
+    </div>
+
+    <!-- 대시보드 그리드 메인 -->
+    <div class="igrid">
+      <div>
+        <div class="ipanel">
+          <div class="iphdr">
+            <span class="ipttl">실시간 현장 압박 및 처리 현황</span>
+            <span class="ipbadge">LIVE</span>
+          </div>
+          <div class="it-wrap"><table class="it">
+            <thead><tr><th>구역</th><th>공정</th><th>책임자</th><th>수준</th><th>갱신</th></tr></thead>
+            <tbody>
+              <tr><td>영등포 3구역</td><td>최종 부지 정리</td><td>강무환 이사</td><td><span class="sb z">완료</span></td><td>06.11</td></tr>
+              <tr><td>마포 상인회</td><td>강제 철거 및 압박</td><td>정우진 이사</td><td><span class="sb d">긴급</span></td><td>06.12</td></tr>
+              <tr><td>구로 D라인</td><td>악성 채권 회수</td><td>행동대 4팀</td><td><span class="sb a">진행</span></td><td>06.10</td></tr>
+              <tr><td>은평 2구역</td><td>알박기 토지 매입</td><td>전략팀</td><td><span class="sb w">대기</span></td><td>06.09</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+
+        <div class="ipanel">
+          <div class="iphdr">
+            <span class="ipttl">외부 리스크 경보 체계</span>
+            <span class="ipbadge">위험</span>
+          </div>
+          <div class="it-wrap"><table class="it">
+            <thead><tr><th>리스크 분류</th><th>세부 탐지 내용</th><th>위험도</th><th>공작 상태</th></tr></thead>
+            <tbody>
+              <tr><td>언론 사찰</td><td>지역 매체 K기자 — 마포 현장 영장 기획 취재 중</td><td><span class="sb d">극비경고</span></td><td>인사 로비 접촉 중</td></tr>
+              <tr><td>경찰 수사</td><td>광역수사대 경제팀 — 뜬소문 추적 단계</td><td><span class="sb w">중위험</span></td><td>내부 조력자 조율</td></tr>
+              <tr><td>유가족 민원</td><td>영등포 철거 사고 유족 시위 조짐</td><td><span class="sb w">중위험</span></td><td>개별 합의 종용</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="ipanel">
+          <div class="iphdr">
+            <span class="ipttl">자금 세탁 수입 분석 (D계정)</span>
+            <span class="ipbadge g">클리어</span>
+          </div>
+          <div class="it-wrap"><table class="it">
+            <tbody>
+              <tr><td style="color:#444;">금월 우회 세탁 액수</td><td style="text-align:right;color:#888;">₩ 4,820,000,000</td></tr>
+              <tr><td style="color:#444;">미정산 채권 총액</td><td style="text-align:right;color:var(--i-red);">₩ 2,340,000,000</td></tr>
+              <tr><td style="color:#444;">정계 비공식 후원금액</td><td style="text-align:right;color:#888;">₩ 120,000,000</td></tr>
+              <tr><td style="color:#444;">이중 이중장부 상태</td><td style="text-align:right;color:var(--i-green);">은닉 완료</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+
+        <div class="ipanel">
+          <div class="iphdr">
+            <span class="ipttl">본사 구역별 보안등급</span>
+            <span class="ipbadge">제한</span>
+          </div>
+          <div class="it-wrap"><table class="it">
+            <tbody>
+              <tr><td style="color:var(--i-red);">7F 회장실 · 특수 금고</td><td><span class="sb d">보안 최고 통제</span></td></tr>
+              <tr><td>6F 비선 임원 전용 구역</td><td><span class="sb w">임원 제한</span></td></tr>
+              <tr><td>2F 작업자 숙소 및 행동대 대기실</td><td><span class="sb a">상시 통제</span></td></tr>
+              <tr><td style="color:var(--i-red);">B2 지하 기밀 고문실 · 아카이브</td><td><span class="sb d">절대 출입 금지</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [이전 이동 완료] 구 사업 현황 메뉴를 대시보드 하단에 완전 매립 및 컴팩트화 -->
+    <div class="ipanel">
+      <div class="iphdr" style="background:#150a0a;">
+        <span class="ipttl" style="color: #ff5555;">[보안 등급 등재] 천우건설 내부 사업 진척 및 수익 현황 정밀 일람</span>
+        <span class="ipbadge n">기밀 열람</span>
+      </div>
+      <div class="it-wrap"><table class="it">
+        <thead>
+          <tr><th>#</th><th>공식 사업명</th><th>실제 성격</th><th>실시간 조치 단계</th><th>책임 부서</th><th>기대 수익</th><th>비고</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>001</td><td>영등포 3구역 재개발</td><td>최종 철거 정리</td><td><span class="sb z">완료 단계</span></td><td>강무환 이사</td><td style="color:var(--i-green);">₩ 83억</td><td>유족 민원 밀착 회유 중</td></tr>
+          <tr><td>002</td><td>마포 상인회 복합개발</td><td>물리적 압박 공작</td><td><span class="sb d">무력화 작전</span></td><td>정우진 이사</td><td style="color:var(--i-green);">₩ 140억</td><td>기자 접근 금지 경고 조치</td></tr>
+          <tr><td>003</td><td>구로 D라인 채권 회수</td><td>강제 자산 압류</td><td><span class="sb a">집행 중</span></td><td>행동대 4팀</td><td style="color:var(--i-green);">₩ 12억</td><td>순조로움</td></tr>
+          <tr><td>004</td><td>은평 2구역 토지 매입</td><td>지주 협박 공작</td><td><span class="sb w">수면 아래 작업</span></td><td>비선 전략팀</td><td style="color:var(--i-green);">₩ 220억</td><td>장기 공작 전환</td></tr>
+          <tr><td>005</td><td>성동 대부 사업장 관리</td><td>유흥업 갈취 자금선</td><td><span class="sb a">상시 운영</span></td><td>행동대 2팀</td><td style="color:var(--i-green);">월 ₩ 9억</td><td>우산 법인 명의 위장</td></tr>
+          <tr><td>006</td><td>시의원 P 대상 입법 로비</td><td>정치 자금 공여</td><td><span class="sb w">매수 조율 중</span></td><td>정우진 이사</td><td>—</td><td style="color:var(--i-red);">내사 동향 상시 검사 중</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================================================
+     PUBLIC CORE SECTIONS (인트라넷 모드 시 텍스트 덧씌우기 가동)
+     ================================================ -->
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-content">
+    <div class="hero-sub">CHEONWOO CONSTRUCTION &nbsp; SINCE 1987</div>
+    <h1 class="hero-h">신뢰와 기술로<br>짓는 <em>내일</em></h1>
+    <p class="hero-p">1987년 창립 이래, 천우건설은 대한민국의 도시와 함께 성장해왔습니다. 재개발부터 신축까지, 모든 현장에서 결과로 말합니다.</p>
+    <div class="hero-btns">
+      <a href="#about" class="btn-p">회사 소개</a>
+      <a href="#projects" class="btn-g">시공 실적 보기</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<!-- STATS BAR -->
+<div id="statsbar">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-n">1987<sup>년</sup></div><div class="stat-l">창립연도</div></div>
+      <div class="stat"><div class="stat-n">39<sup>주년</sup></div><div class="stat-l">창립기념</div></div>
+      <div class="stat"><div class="stat-n">500<sup>+건</sup></div><div class="stat-l">누적 시공 실적</div></div>
+      <div class="stat"><div class="stat-n">200<sup>+명</sup></div><div class="stat-l">임직원 수</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-g">
+      <div>
+        <span class="eyebrow">ABOUT CHEONWOO</span>
+        <h2 class="sec-t">도시의 변화를<br>이끌어온 39년</h2>
+        <div class="sec-rule"></div>
+        <br><br>
+        <p class="about-p">1987년 서울에서 첫 삽을 뜬 이래, 천우건설은 대한민국 도시 개발의 현장을 묵묵히 지켜왔습니다. 소규모 철거 사업으로 시작해 대형 재개발 프로젝트까지, 현장에서 쌓은 경험이 저희의 가장 큰 자산입니다.</p>
+        <p class="about-p">지역 주민과의 소통을 최우선으로, 지속 가능한 도시 환경을 만들기 위해 끊임없이 노력합니다. 단순한 건설사를 넘어, 지역 공동체와 함께 성장하는 파트너가 되겠습니다.</p>
+        <div class="truth-text">[기업 세탁 이력] 1987년 호남 기반 지하 파벌 '천우파'가 합법 법인 외피를 두르기 위해 건설업 등록. 대형 건설 사업의 음성적 하청 이권 및 용역 폭력권 독점 점유로 몸집 확장.</div>
+      </div>
+      <div>
+        <div class="about-box">
+          <div class="about-year">EST. 1987</div>
+          <p class="about-q">"빠르게가 아닌 바르게.<br>결과가 아닌 과정으로<br>신뢰를 짓습니다."</p>
+          <span class="about-cite">— 천성구 회장, 창립 35주년 기념사 中</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES (설명에 줄 찍찍 긋고 진짜 목적 오버레이 구현) -->
+<section id="services">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow">OUR SERVICES</span>
+      <h2 class="sec-t">전문 사업 영역</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="svc-g">
+      <div class="svc">
+        <div class="svc-n">01</div>
+        <div class="svc-t">도시 재개발</div>
+        <p class="svc-d">노후 주거지 및 상업지구의 체계적 재개발 사업을 수행합니다. 주민 협의부터 인허가, 시공까지 원스톱으로 진행하며 지역 가치를 높입니다.</p>
+        <p class="truth-text">[실제 기밀] 노후 구역 주민 무단 협박 및 위력 시위 유도, 알박기 지주 물리적 배제 공작, 하청 단가 후려치기를 통한 조직 핵심 자금 무단 세탁 통로</p>
+        <div class="svc-arr">→</div>
+      </div>
+      <div class="svc">
+        <div class="svc-n">02</div>
+        <div class="svc-t">건축 시공</div>
+        <p class="svc-d">주거용·상업용·업무용 건축물의 신축 및 리모델링 공사를 담당합니다. 엄격한 품질 관리와 공정 준수로 고객 만족을 실현합니다.</p>
+        <p class="truth-text">[실제 기밀] 페이퍼 컴퍼니 수십 개 동원하여 공사 대금 부풀리기 전개, 가짜 자재 납품 원가 허위 계상으로 정계 로비용 은닉 비자금 조성</p>
+        <div class="svc-arr">→</div>
+      </div>
+      <div class="svc">
+        <div class="svc-n">03</div>
+        <div class="svc-t">철거 공사</div>
+        <p class="svc-d">안전을 최우선으로 한 전문 철거 공사를 수행합니다. 도심 밀집 지역의 특수 철거 경험과 신속한 공정 처리 능력을 보유하고 있습니다.</p>
+        <p class="truth-text">[실제 기밀] 직속 가용 행동대 최우선 집중 투입. 한밤중 기습 파손 및 상인회 강제 와해, 사법망 우회를 위한 은밀하고 신속한 야간 진압 공정 처리</p>
+        <div class="svc-arr">→</div>
+      </div>
+      <div class="svc">
+        <div class="svc-n">04</div>
+        <div class="svc-t">부동산 개발</div>
+        <p class="svc-d">토지 매입 및 개발 기획부터 분양까지, 수익성 높은 부동산 개발 사업을 기획하고 실행합니다. 시장 분석과 리스크 관리가 강점입니다.</p>
+        <p class="truth-text">[실제 기밀] 도시개발공사 관계자 대상 성접대 및 로비성 현금 공여를 통한 절대 보안 내부 토지 정보 사전 무단 탈취</p>
+        <div class="svc-arr">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="proj-hd">
+      <div>
+        <span class="eyebrow">PORTFOLIO</span>
+        <h2 class="sec-t">주요 시공 실적</h2>
+        <div class="sec-rule"></div>
+      </div>
+    </div>
+    <div class="proj-g">
+      <div>
+        <div class="proj-img" style="--c1:#3a1818;--c2:#1a0808;"><div class="proj-lbl">영등포</div></div>
+        <div class="proj-info">
+          <div class="proj-tag">도시재개발</div>
+          <div class="proj-nm">영등포 3구역 주택재개발정비사업</div>
+          <div class="proj-meta">서울특별시 영등포구 · 2023 준공</div>
+        </div>
+      </div>
+      <div>
+        <div class="proj-img" style="--c1:#181828;--c2:#0a0a1e;"><div class="proj-lbl">마포</div></div>
+        <div class="proj-info">
+          <div class="proj-tag">철거·신축</div>
+          <div class="proj-nm">마포 상업지구 복합개발 1단계</div>
+          <div class="proj-meta">서울특별시 마포구 · 2024 진행 중</div>
+        </div>
+      </div>
+      <div>
+        <div class="proj-img" style="--c1:#182018;--c2:#0a160a;"><div class="proj-lbl">인천</div></div>
+        <div class="proj-info">
+          <div class="proj-tag">도시재개발</div>
+          <div class="proj-nm">인천 부평 노후주거지 정비사업</div>
+          <div class="proj-meta">인천광역시 부평구 · 2022 준공</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORG CHART (대외비 부서 완벽 제어 분기) -->
+<section id="orgchart">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow">ORGANIZATION</span>
+      <h2 class="sec-t public-info">조직 구성</h2>
+      <h2 class="sec-t intranet-info" style="color: var(--i-red) !important;">조직 지휘 계통 및 핵심 숙청 부서</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="org-wrap">
+      <div class="org-tree">
+        <!-- 회장 -->
+        <div class="org-node chair">
+          <div class="on-rank">CHAIRMAN</div>
+          <div class="on-name">회장</div>
+          <div class="on-role">천우건설(주) 총지휘</div>
+        </div>
+
+        <div class="org-connector-v"></div>
+
+        <!-- 이사진 -->
+        <div style="display:flex;justify-content:center;gap:14px;position:relative;flex-wrap:wrap;">
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:calc(100% - 80px);height:1px;background:var(--border);"></div>
+          <div class="org-node exec">
+            <div class="on-rank">DIRECTOR</div>
+            <div class="on-name">경영 이사</div>
+            <div class="on-role">경영지원 · 법무 겸임</div>
+          </div>
+          <div class="org-node exec">
+            <div class="on-rank">DIRECTOR</div>
+            <div class="on-name">전략 이사</div>
+            <div class="on-role">홍보 · 전략 수립</div>
+          </div>
+          <div class="org-node exec">
+            <div class="on-rank">DIRECTOR</div>
+            <div class="on-name">영업 이사</div>
+            <div class="on-role">수주 공작 · 대외 로비</div>
+          </div>
+          <div class="org-node exec">
+            <div class="on-rank">DIRECTOR</div>
+            <div class="on-name">현장관리 이사</div>
+            <div class="on-role">현장 행동대 총괄 관리</div>
+          </div>
+        </div>
+
+        <!-- 부서 (행동대, 정리팀은 대외용 홈페이지에서 완전히 감춤) -->
+        <div class="org-dept-row">
+          <div class="org-dept">경영지원팀</div>
+          <div class="org-dept">법무팀</div>
+          <div class="org-dept">홍보팀</div>
+          <div class="org-dept">전략팀</div>
+          <div class="org-dept">영업팀</div>
+          <div class="org-dept">현장관리팀</div>
+          <div class="org-dept special secret-dept">직할 행동대 ※</div>
+          <div class="org-dept special secret-dept">기밀 정리팀 ※</div>
+        </div>
+      </div>
+      <p class="rank-note secret-note" style="margin-top:12px;font-size:11px;">※ 비공식 특수 무력 지지 조직 (사내 내부망 관리자 전용 확인 가능)</p>
+    </div>
+
+    <div style="margin-top:64px;">
+      <div class="sec-hd" style="margin-bottom:32px;">
+        <span class="eyebrow">RANK STRUCTURE</span>
+        <h3 style="font-size:22px;font-weight:800;color:var(--dark);letter-spacing:-.02em;">직급 체계</h3>
+      </div>
+      <div class="rank-ladder">
+        <div class="rank-item"><div class="rank-box">사원</div><div class="rank-arrow">→</div></div>
+        <div class="rank-item"><div class="rank-box">주임</div><div class="rank-arrow">→</div></div>
+        <div class="rank-item"><div class="rank-box">대리</div><div class="rank-arrow">→</div></div>
+        <div class="rank-item"><div class="rank-box">과장</div><div class="rank-arrow">→</div></div>
+        <div class="rank-item"><div class="rank-box">부장</div><div class="rank-arrow">→</div></div>
+        <div class="rank-item"><div class="rank-box">이사</div><div class="rank-arrow">→</div></div>
+        <div class="rank-item"><div class="rank-box top">회장</div></div>
+      </div>
+      <p class="rank-note secret-note" style="margin-top: 14px;">※ 비선 행동대·정리팀은 중간 위계 체계를 무시하고 회장/현장관리 이사 직속으로 하향식 하명 집행</p>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF -->
+<section id="staff">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow">OUR PEOPLE</span>
+      <h2 class="sec-t">임직원 소개</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="staff-g">
+
+      <!-- 천성구 -->
+      <div class="staff-card">
+        <div class="staff-card-accent"></div>
+        <div class="staff-img-wrap">
+          <img src="https://raw.githubusercontent.com/hamaa-lab/hamaa.github.io/refs/heads/main/%EC%B2%9C%EC%84%B1%EA%B5%AC.jpg" alt="천성구" loading="lazy">
+        </div>
+        <div class="staff-name-row"><span class="staff-name">천성구</span><span class="staff-age">42세</span></div>
+        <div class="staff-role public-info">대표이사 회장</div>
+        <div class="staff-role intranet-info">대표이사 회장 / 천우파 2대 보스</div>
+        <div class="staff-stat public-info">187cm · 마른 듯 단단한 체형</div>
+        <div class="staff-stat intranet-info">187cm · 82kg · 고급정장 상시 착용</div>
+        <ul class="staff-desc public-info">
+          <li>냉정하고 권위적, 이익 중심</li>
+          <li>항상 여유롭고 친절한 척하나 거리 명확</li>
+          <li>화가 나면 표정 없이 눈빛만 싸늘해짐</li>
+        </ul>
+        <ul class="staff-desc intranet-info">
+          <li>초대 천우파 보스 아들, 내부 소문 다수</li>
+          <li>완벽 통제 강박 · 복종 유도 심리 조작</li>
+          <li>시간 개념 철저, 예측 불가 행동 절대 불허</li>
+        </ul>
+        <div class="staff-kw public-info"><span>와인 수집</span><span>고급 시계</span><span>이혼 1회</span><span>시간 개념 철저</span></div>
+        <div class="staff-kw intranet-info"><span>천우파 2대 총수</span><span>완벽 통제</span><span>심리 조작 압박</span><span>현금 독점</span></div>
+      </div>
+
+      <!-- 정우진 -->
+      <div class="staff-card">
+        <div class="staff-card-accent"></div>
+        <div class="staff-img-wrap">
+          <img src="https://raw.githubusercontent.com/hamaa-lab/hamaa.github.io/refs/heads/main/%EC%A0%95%EC%9A%B0%EC%A7%84.webp" alt="정우진" loading="lazy">
+        </div>
+        <div class="staff-name-row"><span class="staff-name">정우진</span><span class="staff-age">33세</span></div>
+        <div class="staff-role public-info">전략·홍보 이사</div>
+        <div class="staff-role intranet-info">전략 이사 / 비선 판짜기 총괄</div>
+        <div class="staff-stat public-info">184cm · 날렵한 근육 체형</div>
+        <div class="staff-stat intranet-info">184cm · 83kg · 항상 정장, 넥타이 느슨하게</div>
+        <ul class="staff-desc public-info">
+          <li>능글맞고 가벼워 보이나 계산 빠름</li>
+          <li>사교적이지만 거리 조절 철저</li>
+          <li>위험 상황에서도 웃으며 여유 유지</li>
+        </ul>
+        <ul class="staff-desc intranet-info">
+          <li>반항심으로 조직 유입, 재능 발견 후 정착</li>
+          <li>정계 로비 및 차명 장부 설계 전담</li>
+          <li>블러핑·심리전 특기, 술자리 정보전 선호</li>
+        </ul>
+        <div class="staff-kw public-info"><span>도박</span><span>당구</span><span>클럽</span><span>즉흥 여행</span></div>
+        <div class="staff-kw intranet-info"><span>비선 설계자</span><span>로비 및 판짜기</span><span>정계 차명 장부</span></div>
+      </div>
+
+      <!-- 강무환 -->
+      <div class="staff-card">
+        <div class="staff-card-accent"></div>
+        <div class="staff-img-wrap">
+          <img src="https://raw.githubusercontent.com/hamaa-lab/hamaa.github.io/refs/heads/main/%EA%B0%95%EB%AC%B4%ED%99%98.webp" alt="강무환" loading="lazy">
+        </div>
+        <div class="staff-name-row"><span class="staff-name">강무환</span><span class="staff-age">39세</span></div>
+        <div class="staff-role public-info">현장관리 이사</div>
+        <div class="staff-role intranet-info">현장관리 이사 / 행동대 총괄 · 회장 오른팔</div>
+        <div class="staff-stat public-info">194cm · 단단한 거구 체형</div>
+        <div class="staff-stat intranet-info">194cm · 98kg · 흉터 다수, 인상 짙음</div>
+        <ul class="staff-desc public-info">
+          <li>무뚝뚝하고 말수 적음, 행동 중심</li>
+          <li>집요함 — 한 번 시작하면 끝까지</li>
+          <li>가까워지면 티 안 나게 챙기는 스타일</li>
+        </ul>
+        <ul class="staff-desc intranet-info">
+          <li>10대부터 천우파 유입, 험한 일 전담</li>
+          <li>행동대 직접 타격 사령관, 근접전 특기</li>
+          <li>강제 철거·채권 회수·충돌 대응 총괄</li>
+        </ul>
+        <div class="staff-kw public-info"><span>헬스</span><span>새벽 러닝</span><span>담배</span><span>흉터 다수</span></div>
+        <div class="staff-kw intranet-info"><span>행동대 사령관</span><span>근접 실전 격투</span><span>흉터 다수</span></div>
+      </div>
+
+      <!-- 김도윤 -->
+      <div class="staff-card">
+        <div class="staff-card-accent"></div>
+        <div class="staff-img-wrap">
+          <img src="https://raw.githubusercontent.com/hamaa-lab/hamaa.github.io/refs/heads/main/%EA%B9%80%EB%8F%84%EC%9C%A4.jpg" alt="김도윤" loading="lazy">
+        </div>
+        <div class="staff-name-row"><span class="staff-name">김도윤</span><span class="staff-age">29세</span></div>
+        <div class="staff-role public-info">경영지원팀 과장</div>
+        <div class="staff-role intranet-info">경영지원팀 과장 / 이중 장부 설계자</div>
+        <div class="staff-stat public-info">181cm · 생활 근육 체형</div>
+        <div class="staff-stat intranet-info">181cm · 70kg · 안경 착용, 노트북 상시 지참</div>
+        <ul class="staff-desc public-info">
+          <li>소심하지만 실력 있음, 꼼꼼하고 예민함</li>
+          <li>칭찬에 약하고 거짓말을 못함</li>
+          <li>틱틱대며 자신의 소심함 감추려 노력</li>
+        </ul>
+        <ul class="staff-desc intranet-info">
+          <li>대기업 재무팀 출신, 프로젝트로 엮여 정착</li>
+          <li>우회 세탁 정밀 기획 · 합법 라인 설계 전담</li>
+          <li>회사 정체 알고 합리화 중 — 죄책감 잠재</li>
+        </ul>
+        <div class="staff-kw public-info"><span>카페 투어</span><span>경제 유튜브</span><span>커피 중독</span><span>안경</span></div>
+        <div class="staff-kw intranet-info"><span>이중 장부 설계자</span><span>자금 세탁 정밀 기획</span><span>죄책감 의심군</span></div>
+      </div>
+
+      <!-- 이수현 -->
+      <div class="staff-card">
+        <div class="staff-card-accent"></div>
+        <div class="staff-img-wrap">
+          <img src="https://raw.githubusercontent.com/hamaa-lab/hamaa.github.io/refs/heads/main/%EC%9D%B4%EC%88%98%ED%98%84.webp" alt="이수현" loading="lazy">
+        </div>
+        <div class="staff-name-row"><span class="staff-name">이수현</span><span class="staff-age">25세</span></div>
+        <div class="staff-role public-info">현장관리부 주임</div>
+        <div class="staff-role intranet-info">정리팀 핵심 요원 / 대외: 현장관리부 주임</div>
+        <div class="staff-stat public-info">191cm · 탄탄하고 마른 근육</div>
+        <div class="staff-stat intranet-info">191cm · 82kg · 창백한 피부, 곱슬 흑발</div>
+        <ul class="staff-desc public-info">
+          <li>매우 과묵하고 무반응, 저표현</li>
+          <li>눈치 빠르고 경계심 많음, 항상 관찰</li>
+          <li>감정이 거의 드러나지 않음</li>
+        </ul>
+        <ul class="staff-desc intranet-info">
+          <li>고아원 출신, 관찰·패턴 읽기 능력 발달</li>
+          <li>기척 숨기기 · 미행 · 현장 사후 정리 전담</li>
+          <li>20살 입사, 최연소 정리팀 핵심 요원</li>
+        </ul>
+        <div class="staff-kw public-info"><span>사진 촬영</span><span>야간 활동</span><span>혼자 있기</span><span>후드</span></div>
+        <div class="staff-kw intranet-info"><span>정리팀 요원</span><span>기척 미탐지 접근</span><span>현장 사후 처리</span></div>
+      </div>
+
+      <!-- 한재혁 -->
+      <div class="staff-card">
+        <div class="staff-card-accent"></div>
+        <div class="staff-img-wrap">
+          <img src="https://raw.githubusercontent.com/hamaa-lab/hamaa.github.io/refs/heads/main/%ED%95%9C%EC%9E%AC%ED%98%81.webp" alt="한재혁" loading="lazy">
+        </div>
+        <div class="staff-name-row"><span class="staff-name">한재혁</span><span class="staff-age">28세</span></div>
+        <div class="staff-role public-info">경영지원팀 사원</div>
+        <div class="staff-role intranet-info">경영지원팀 신입 / 상시 감시 대상</div>
+        <div class="staff-stat public-info">185cm · 생활 근육 체형</div>
+        <div class="staff-stat intranet-info">185cm · 78kg · 단정한 흑발, 청안</div>
+        <ul class="staff-desc public-info">
+          <li>평소 밝고 무난한 회사원 모드</li>
+          <li>눈치 빠르고 센스 있으나 실제로는 시니컬</li>
+          <li>정시 퇴근, 눈에 안 띄기가 목표</li>
+        </ul>
+        <ul class="staff-desc intranet-info">
+          <li>중소기업 전전하다 복지 보고 입사</li>
+          <li>회사 뒷세계 아직 미인지 — 바지 신입</li>
+          <li>이상함 눈치채기 시작 · 퇴사 검토 중</li>
+        </ul>
+        <div class="staff-kw public-info"><span>유튜브</span><span>게임</span><span>커뮤니티 눈팅</span><span>정시 퇴근</span></div>
+        <div class="staff-kw intranet-info"><span>바지 영입 신입</span><span>뒷세계 미인지</span><span>상시 감시 중</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CSR (사회공헌 역시 실상 오버레이) -->
+<section id="csr">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow">SOCIAL RESPONSIBILITY</span>
+      <h2 class="sec-t">지역과 함께 성장하는<br>천우건설의 약속</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="csr-g">
+      <div class="csr-c">
+        <div class="csr-ico">🎓</div>
+        <div class="csr-t">천우 장학재단</div>
+        <p class="csr-d">2003년 설립된 천우 장학재단은 매년 50명의 대학생에게 장학금을 지원합니다. 건설·공학 분야 인재 육성에 힘쓰고 있습니다.</p>
+        <div class="truth-text">[실제 기밀] 사법부 및 검·경 수사 라인 핵심 간부 자녀 대상 추적 불가 합법 우회형 뇌물 공여 및 상시 고위 관료 자녀 관리 세탁 창구</div>
+      </div>
+      <div class="csr-c">
+        <div class="csr-ico">🏘️</div>
+        <div class="csr-t">지역사회 공헌</div>
+        <p class="csr-d">재개발 사업 지역의 상인·주민과 긴밀한 협의체를 운영합니다. 이주 지원 및 생활 안정 프로그램을 통해 갈등을 최소화합니다.</p>
+        <div class="truth-text">[실제 기밀] 이주 반대 상인 연합 집행부 핵심 구성원 매수 공작, 협박 녹취 확보를 통한 법적 권리 무력화 일임</div>
+      </div>
+      <div class="csr-c">
+        <div class="csr-ico">🌱</div>
+        <div class="csr-t">환경 책임 경영</div>
+        <p class="csr-d">친환경 철거 공법 도입 및 건설폐기물 재활용률 제고를 위해 지속적으로 투자합니다. 탄소저감 시공 시스템을 단계적으로 확대 중입니다.</p>
+        <div class="truth-text">[실제 기밀] 야간 기습 불법 폐기물 및 지정 유독 독성 물질 무단 야산 매립 비용 절감 목적, 환경 단체 명의 기부금 선제 차단 로비</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLIC NEWS -->
+<section id="news" class="public-info">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow">NEWS &amp; NOTICE</span>
+      <h2 class="sec-t">보도자료 · 공지사항</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="news-g">
+      <div>
+        <div class="news-item">
+          <div class="ndate"><div class="ndate-d">05</div><div class="ndate-ym">2026.06</div></div>
+          <div>
+            <div class="news-ti">천우건설, 영등포 3구역 재개발 정비계획 변경안 서울시 인가 취득</div>
+            <p class="news-sm">서울특별시로부터 도시정비형 재개발사업 정비계획 변경안 인가를 취득하였습니다.</p>
+          </div>
+        </div>
+        <div class="news-item">
+          <div class="ndate"><div class="ndate-d">21</div><div class="ndate-ym">2026.05</div></div>
+          <div>
+            <div class="news-ti">2026 대한민국 건설대상 '도시재생 부문' 우수기업 선정</div>
+            <p class="news-sm">천우건설이 도시재생 부문 우수기업으로 선정되는 영예를 안았습니다.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="notice-h">공지사항</div>
+        <div class="noti"><span class="noti-badge">공지</span><div class="noti-t">2026년 하반기 신입·경력 공개채용 안내</div></div>
+        <div class="noti"><span class="noti-badge">공지</span><div class="noti-t">개인정보 처리방침 개정 안내 (2026.06.01 시행)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     PURE INTRANET MODULES (사내망 활성화 시 하단 노출)
+     ================================================ -->
+<section id="int-notices">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow" style="color: var(--i-red);">TOP SECRET NOTICES</span>
+      <h2 class="sec-t">사내망 기밀 보안 통신 지시문</h2>
+      <div class="sec-rule" style="background: var(--i-red);"></div>
+    </div>
+    <div class="ipanel">
+      <div class="nitem">
+        <div class="nitem-top"><span class="nlvl u">긴급</span><span class="ntitle">[마포 구역] 언론사 K 기자 역공작 및 밀착 동향 파악 독촉</span></div>
+        <div class="nmeta">2026.06.12 &nbsp;|&nbsp; 발신: 정우진 이사</div>
+      </div>
+      <div class="nitem">
+        <div class="nitem-top"><span class="nlvl u">긴급</span><span class="ntitle">광수대 접촉 결과에 따른 4단계 세탁 은닉 자금 집행 검토 지시</span></div>
+        <div class="nmeta">2026.06.11 &nbsp;|&nbsp; 발신: 천성구 회장</div>
+      </div>
+      <div class="nitem">
+        <div class="nitem-top"><span class="nlvl c">경고</span><span class="ntitle">영등포 철거 현장 유가족 시위 대열 와해 및 합의 제안 가이드라인 배포</span></div>
+        <div class="nmeta">2026.06.10 &nbsp;|&nbsp; 발신: 비선 전략팀</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="int-files">
+  <div class="container">
+    <div class="sec-hd">
+      <span class="eyebrow" style="color: var(--i-red);">CLASSIFIED ARCHIVE</span>
+      <h2 class="sec-t">실시간 불법 이중장부 및 암호 파일 보관 보관소</h2>
+      <div class="sec-rule" style="background: var(--i-red);"></div>
+    </div>
+    <div class="ipanel">
+      <div class="fitem"><span class="fico">🔒</span><span class="fnm">이중장부_우회D계정_2026_Q2_최종결산.enc</span><span class="fcls">특급기밀</span><span class="fdt">06.05</span></div>
+      <div class="fitem"><span class="fico">🔒</span><span class="fnm">정치권_후원금_공여선_우회루트_메모록.enc</span><span class="fcls">특급기밀</span><span class="fdt">03.14</span></div>
+      <div class="fitem"><span class="fico">📁</span><span class="fnm">마포_타격대상_지주연합_자산_및_가족관계인적사항.xlsx</span><span class="fdt">05.18</span></div>
+      <div class="fitem"><span class="fico">🔒</span><span class="fnm">지하2층_B2구역_CCTV_강제소거_기록록_전체.enc</span><span class="fcls">기밀</span><span class="fdt">06.12</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RECRUIT -->
+<section id="recruit">
+  <div class="container">
+    <div class="rec-in">
+      <div>
+        <h3>천우건설과 함께 도시의 미래를 짓겠습니까?</h3>
+        <p>능력 있는 인재라면 누구든 환영합니다. 경쟁력 있는 연봉과 복지를 제공합니다.</p>
+      </div>
+      <a href="#" class="btn-rec">채용 공고 확인하기</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="ft-g">
+      <div>
+        <div id="seal" onclick="openPw()" style="margin-bottom: 16px;">
+          <svg viewBox="0 0 40 40"><use href="#dragon-mark"/></svg>
+        </div>
+        <div class="ft-addr">
+          대표이사: 천성구 &nbsp;|&nbsp; 사업자등록번호: 123-81-XXXXX<br>
+          서울특별시 외곽구 천우로 1987 천우빌딩<br>
+          대표전화: 02-1987-0000 &nbsp;|&nbsp; FAX: 02-1987-0001<br>
+          이메일: info@cheonwoo-const.co.kr
+        </div>
+      </div>
+      <div>
+        <div class="ft-ht">회사</div>
+        <ul class="ft-ul">
+          <li><a href="#about">회사 소개</a></li>
+          <li><a href="#orgchart">조직도</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-ht">사업</div>
+        <ul class="ft-ul">
+          <li><a href="#services">도시 재개발</a></li>
+          <li><a href="#services">건축 시공</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-ht">고객</div>
+        <ul class="ft-ul">
+          <li><a href="#news">고객센터</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <div class="ft-copy">© 1987–2026 천우건설(주) CHEONWOO CONSTRUCTION CO., LTD. ALL RIGHTS RESERVED.</div>
+    </div>
+    <!-- 서브 힌트 라인 — 발견 유도 -->
+    <div class="ft-hint-row">
+      <span class="ft-hint-txt">천우건설은 1987년 설립 이래 신뢰와 기술로 도시를 만들어왔습니다.</span>
+    </div>
+  </div>
+</footer>
+
+
+<!-- PASSWORD MODAL -->
+<div id="pw-wrap">
+  <div class="pw-box" id="pw-box">
+    <button class="pw-x" onclick="closePw()">✕</button>
+    <div class="pw-seal-ico"><svg viewBox="0 0 40 40"><use href="#dragon-mark"/></svg></div>
+    <div class="pw-label">접속 코드를 입력하십시오</div>
+    <input type="password" class="pw-input" id="pw-in" placeholder="· · · · · · · ·" onkeydown="if(event.key==='Enter')verifyPw()">
+    <button class="pw-ok" onclick="verifyPw()">접속</button>
+    <div class="pw-err" id="pw-err"></div>
+    <div class="pw-hint">Hint : 천우건설 창립연도</div>
+  </div>
+</div>
+
+
+<!-- GLITCH TRANSITION OVERLAY -->
+<div id="glitch-overlay">
+  <div class="glitch-warn-bar">
+    <span><span class="glitch-warn-dot" style="display:inline-block;"></span>WARNING: UNAUTHORIZED ACCESS DETECTED</span>
+    <span>IP: 112.XXX.XX.XXX &nbsp;|&nbsp; SESSION: HIJACKED</span>
+    <span>TRACE IN PROGRESS...</span>
+  </div>
+  <div class="glitch-code-bg" id="glitch-code-bg"></div>
+  <div class="glitch-scanlines"></div>
+  <div class="glitch-vignette"></div>
+  <div class="glitch-tears" id="glitch-tears"></div>
+  <div class="glitch-side left"></div>
+  <div class="glitch-side right"></div>
+  <div class="glitch-content">
+    <div class="glitch-hack-label">⚠ SYSTEM BREACH DETECTED ⚠</div>
+    <div class="glitch-logo">天宇</div>
+    <div class="glitch-sub" id="glitch-sub">내부망 접속 중</div>
+    <div class="glitch-bar-wrap">
+      <div class="glitch-bar-fill" id="glitch-bar"></div>
+    </div>
+    <div class="glitch-status" id="glitch-status">접속 코드 검증 중...</div>
+    <div class="glitch-granted" id="glitch-granted">ACCESS GRANTED</div>
+  </div>
+  <div class="glitch-meta" id="glitch-meta">CHEONWOO INTRANET v2.7 &nbsp;|&nbsp; ENCRYPTED CHANNEL COMPROMISED &nbsp;|&nbsp; DO NOT CLOSE</div>
+</div>
+
+
+<script>
+/* ============================================================
+   HAMBURGER MENU
+   ============================================================ */
+function toggleNav() {
+  const btn   = document.getElementById('burger-btn');
+  const panel = document.getElementById('nav-panel');
+  const open  = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+}
+
+function closeNav() {
+  document.getElementById('nav-panel').classList.remove('open');
+  document.getElementById('burger-btn').classList.remove('open');
+}
+
+/* 패널 바깥 클릭 시 닫힘 */
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('nav-panel');
+  const btn   = document.getElementById('burger-btn');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
+    closeNav();
+  }
+});
+
+/* ============================================================
+   PASSWORD LOGIC
+   ============================================================ */
+const PASS = '1987';
+
+function openPw() {
+  document.getElementById('pw-wrap').classList.add('on');
+  setTimeout(() => document.getElementById('pw-in').focus(), 120);
+}
+
+function closePw() {
+  document.getElementById('pw-wrap').classList.remove('on');
+  document.getElementById('pw-in').value = '';
+  document.getElementById('pw-err').textContent = '';
+}
+
+function verifyPw() {
+  const val = document.getElementById('pw-in').value;
+  if (val === PASS) {
+    closePw();
+    openInt();
+  } else {
+    const box = document.getElementById('pw-box');
+    box.classList.remove('shake');
+    void box.offsetWidth;
+    box.classList.add('shake');
+    document.getElementById('pw-err').textContent = '접속 코드가 일치하지 않습니다.';
+    document.getElementById('pw-in').value = '';
+    document.getElementById('pw-in').focus();
+  }
+}
+
+document.getElementById('pw-wrap').addEventListener('click', function(e) {
+  if (e.target === this) closePw();
+});
+
+/* ============================================================
+   GLITCH TRANSITION & SWITCH ARCHITECTURE
+   ============================================================ */
+function openInt() {
+  const overlay   = document.getElementById('glitch-overlay');
+  const bar       = document.getElementById('glitch-bar');
+  const statusEl  = document.getElementById('glitch-status');
+  const grantedEl = document.getElementById('glitch-granted');
+  const subEl     = document.getElementById('glitch-sub');
+  const tearsEl   = document.getElementById('glitch-tears');
+  const codeBg    = document.getElementById('glitch-code-bg');
+
+  bar.style.width          = '0%';
+  statusEl.style.display   = '';
+  grantedEl.style.display  = 'none';
+  subEl.textContent        = '내부망 접속 중';
+  statusEl.textContent     = '접속 코드 검증 중...';
+
+  overlay.classList.add('on');
+
+  /* 흐르는 코드 배경 생성 */
+  const codeChars = '천우건설01101001해킹ACCESSED천宇ACCESS0110내부망BREACH1001SYSTEM1100크래킹FIREWALL우회PROXY암호화DECRYPT비밀장부HIDDEN세탁LAUNDER정리CLEAN행동대FORCE01001100';
+  function refreshCode() {
+    let out = '';
+    for (let i = 0; i < 520; i++) {
+      out += codeChars[Math.floor(Math.random() * codeChars.length)];
+      if (i % 62 === 61) out += '\n';
+      else out += (Math.random() > 0.85 ? ' ' : '');
+    }
+    if (codeBg) codeBg.textContent = out;
+  }
+  refreshCode();
+  const codeInterval = setInterval(refreshCode, 120);
+
+  /* 찢김 노이즈 루프 */
+  let tearActive = true;
+  function tearLoop() {
+    if (!tearActive) return;
+    tearsEl.innerHTML = '';
+    const n = Math.floor(Math.random() * 8);
+    for (let i = 0; i < n; i++) {
+      const t = document.createElement('div');
+      t.className = 'glitch-tear';
+      t.style.top     = (Math.random() * 100).toFixed(1) + '%';
+      t.style.height  = (Math.random() * 6 + 1).toFixed(1) + 'px';
+      t.style.opacity = (Math.random() * 0.7 + 0.25).toFixed(2);
+      t.style.transform = 'translateX(' + ((Math.random() - 0.5) * 48).toFixed(1) + 'px)';
+      t.style.mixBlendMode = 'screen';
+      tearsEl.appendChild(t);
+    }
+    setTimeout(function() { if (tearActive) tearsEl.innerHTML = ''; }, 55);
+    setTimeout(tearLoop, Math.random() * 130 + 55);
+  }
+  tearLoop();
+
+  /* 상태 메시지 사이클 — 해킹 컨셉 */
+  const statuses = [
+    '접속 코드 검증 중...',
+    '방화벽 우회 프로토콜 주입 중...',
+    '암호화 채널 강제 복호화 중...',
+    '이중 장부 데이터베이스 접근 중...',
+    '내부 CCTV 피드 미러링 중...',
+    '기밀 파일 트리 마운트 중...',
+    '원격 세션 하이재킹 완료',
+  ];
+  let sIdx = 0;
+  const statusCycle = setInterval(function() {
+    sIdx = (sIdx + 1) % statuses.length;
+    statusEl.textContent = statuses[sIdx];
+  }, 220);
+
+  /* 프로그레스 바 */
+  let prog = 0;
+  const barTick = setInterval(function() {
+    prog += Math.random() * 18 + 4;
+    if (prog > 100) prog = 100;
+    bar.style.width = prog + '%';
+
+    if (prog >= 100) {
+      clearInterval(barTick);
+      clearInterval(statusCycle);
+      clearInterval(codeInterval);
+      statusEl.style.display  = 'none';
+      grantedEl.style.display = 'block';
+      subEl.textContent       = '접근 허가됨 — 세션 하이재킹 완료';
+
+      setTimeout(function() {
+        tearActive = false;
+        tearsEl.innerHTML = '';
+        overlay.style.animation = 'none';
+        overlay.style.background = '#ffffff';
+        setTimeout(function() {
+          overlay.classList.remove('on');
+          overlay.style.background = '';
+          overlay.style.animation  = '';
+          if (codeBg) codeBg.textContent = '';
+
+          document.body.classList.add('intranet-mode');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 90);
+      }, 600);
+    }
+  }, 95);
+}
+
+function closeInt() {
+  closeNav();
+  document.body.classList.remove('intranet-mode');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
